@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 # ReddIF 📚
 
 Plataforma colaborativa de monitoria estudantil desenvolvida por alunos do curso de **Tecnologia em Análise e Desenvolvimento de Sistemas** do IFMS — campus Três Lagoas.
@@ -91,7 +92,7 @@ reddif/
 │
 └── README.md                 # Documentação principal
 
----
+----
 
 ## Equipe
 
@@ -108,5 +109,8 @@ reddif/
 ---
 
 *Instituto Federal de Educação, Ciência e Tecnologia do Mato Grosso do Sul - IFMS; Três Lagoas, 2026*
+=======
+# reddIF
+ReddIF é uma plataforma colaborativa de monitoria acadêmica que conecta estudantes para compartilhamento de conhecimento de forma acessível, segura e flexível. O sistema permite interação entre alunos, suporte em disciplinas, anonimato opcional e mecanismos de moderação para fortalecer a aprendizagem colaborativa..
 
 
