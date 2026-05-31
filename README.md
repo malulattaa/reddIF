@@ -37,6 +37,64 @@ A plataforma adota uma arquitetura baseada na separação entre front-end e back
 
 ---
 
+## 📂 Estrutura do Repositório
+
+O projeto adota uma arquitetura de **Monorepo**, separando claramente as responsabilidades entre a API e a interface de usuário, garantindo independência no desenvolvimento e facilidade na orquestração dos contêineres.
+
+```text
+reddif/
+│
+├── backend/                  # Módulo da API (Python + FastAPI)
+│   ├── app/
+│   │   ├── main.py           # Ponto de entrada e inicialização do FastAPI
+│   │   ├── config.py         # Gerenciamento de variáveis de ambiente (.env)
+│   │   ├── database.py       # Configuração e sessão do Banco de Dados
+│   │   │
+│   │   ├── core/             # Configurações de segurança (hashing, JWT)
+│   │   │   └── security.py
+│   │   │
+│   │   ├── models/           # Entidades do Banco de Dados (ORM baseadas na UML)
+│   │   │   ├── usuario.py
+│   │   │   ├── disciplina.py
+│   │   │   └── duvida.py
+│   │   │
+│   │   ├── schemas/          # Contratos de validação de dados (Pydantic)
+│   │   │   ├── usuario.py
+│   │   │   └── duvida.py
+│   │   │
+│   │   └── routers/          # Controladores e Endpoints da API
+│   │       ├── auth.py       # Rotas de Login/Cadastro
+│   │       ├── usuarios.py   # Gestão de perfis e anonimato
+│   │       └── duvidas.py    # Rotas de postagem e monitoria
+│   │
+│   ├── Dockerfile            # Imagem Docker do ambiente Python
+│   └── requirements.txt      # Dependências do Backend
+│
+├── frontend/                 # Módulo da Interface (Vue.js)
+│   ├── src/
+│   │   ├── assets/           # Estilos globais e recursos estáticos (imagens, ícones)
+│   │   ├── components/       # Componentes de UI reutilizáveis (ex: Navbar, Card)
+│   │   │
+│   │   ├── router/           # Configuração de navegação (Vue Router)
+│   │   │   └── index.js
+│   │   │
+│   │   ├── views/            # Telas da aplicação (Páginas principais)
+│   │   │   ├── Login.vue
+│   │   │   ├── Feed.vue
+│   │   │   └── PostarDuvida.vue
+│   │   │
+│   │   ├── App.vue           # Componente raiz da interface
+│   │   └── main.js           # Ponto de inicialização do Vue
+│   │
+│   ├── Dockerfile            # Imagem Docker do ambiente Node/Vue
+│   └── package.json          # Dependências do Frontend
+│
+├── .gitignore                # Arquivos locais ignorados (.env, __pycache__, node_modules)
+├── docker-compose.yml        # Orquestrador de serviços (API, Interface e Banco de Dados)
+└── README.md                 # Documentação principal
+
+---
+
 ## Equipe
 
 | Nome |
@@ -52,3 +110,5 @@ A plataforma adota uma arquitetura baseada na separação entre front-end e back
 ---
 
 *Instituto Federal de Educação, Ciência e Tecnologia do Mato Grosso do Sul - IFMS; Três Lagoas, 2026*
+
+
