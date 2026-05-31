@@ -30,7 +30,6 @@ A plataforma resolve isso oferecendo um espaço digital, flexível e seguro para
 - **Back-end:** Python e FastAPI
 - **Front-end:** React
 - **Banco de Dados:** SQL (relacional)
-- **Containerização:** Docker
 
 ## Arquitetura
 
@@ -68,7 +67,6 @@ reddif/
 │   │       ├── usuarios.py   # Gestão de perfis e anonimato
 │   │       └── duvidas.py    # Rotas de postagem e monitoria
 │   │
-│   ├── Dockerfile            # Imagem Docker do ambiente Python
 │   └── requirements.txt      # Dependências do Backend
 │
 ├── frontend/                 # Módulo da Interface (Vue.js)
@@ -87,7 +85,6 @@ reddif/
 │   │   ├── App.vue           # Componente raiz da interface
 │   │   └── main.js           # Ponto de inicialização do Vue
 │   │
-│   ├── Dockerfile            # Imagem Docker do ambiente Node/Vue
 │   └── package.json          # Dependências do Frontend
 │
 └── README.md                 # Documentação principal
@@ -98,13 +95,13 @@ reddif/
 
 | Nome |
 |---|
-| Ana Clara Miguel dos Santos |
-| Ana Laura Martins |
-| Gabriela Santos Tucunduva |
-| Leonardo Franco |
-| Luísa de Matos |
-| Maria Luisa Ribeiro Martins Latta |
-| Vinicius Henrique Lima de Souza |
+| Ana Clara Miguel dos Santos | Front
+| Ana Laura Martins | Front
+| Gabriela Santos Tucunduva | Back
+| Leonardo Franco | Back
+| Luísa de Matos | Front
+| Maria Luisa Ribeiro Martins Latta | Back
+| Vinicius Henrique Lima de Souza | Back
 
 ---
 
