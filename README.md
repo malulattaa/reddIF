@@ -89,8 +89,6 @@ reddif/
 │   ├── Dockerfile            # Imagem Docker do ambiente Node/Vue
 │   └── package.json          # Dependências do Frontend
 │
-├── .gitignore                # Arquivos locais ignorados (.env, __pycache__, node_modules)
-├── docker-compose.yml        # Orquestrador de serviços (API, Interface e Banco de Dados)
 └── README.md                 # Documentação principal
 
 ---
