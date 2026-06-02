@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Login from './views/Login.jsx'
+import Cadastro from './views/Cadastro.jsx'
 import Feed from './views/Feed.jsx'
 import PostarDuvida from './views/PostarDuvida.jsx'
 
@@ -14,6 +15,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/cadastro" element={<Cadastro />} />
         <Route path="/feed" element={<RotaProtegida><Feed /></RotaProtegida>} />
         <Route path="/postar" element={<RotaProtegida><PostarDuvida /></RotaProtegida>} />
       </Routes>
