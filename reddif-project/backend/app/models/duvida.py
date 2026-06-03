@@ -7,7 +7,7 @@ from datetime import timezone, datetime
 class Post(Base):
     __tablename__ = "posts"
     
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, autoincrement=True, index=True)
     titulo = Column(String, nullable=False)
     descricao = Column(String, nullable=False)
     anonimo = Column(Boolean, default=False)
