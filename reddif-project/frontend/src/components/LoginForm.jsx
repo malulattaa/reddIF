@@ -31,8 +31,9 @@ export default function LoginForm({ onCadastro }) {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <div>
-            <label className="block text-sm font-medium text-gray-800 mb-1">Email institucional</label>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-800 mb-1">Email institucional</label>
             <input
+              id="email"
               type="email"
               placeholder="seu.nome@estudante.ifms.edu.br"
               value={email}
@@ -43,8 +44,9 @@ export default function LoginForm({ onCadastro }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-800 mb-1">Senha</label>
+            <label htmlFor="senha" className="block text-sm font-medium text-gray-800 mb-1">Senha</label>
             <input
+              id="senha"
               type="password"
               placeholder="••••••••"
               value={senha}
