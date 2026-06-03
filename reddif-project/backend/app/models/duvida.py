@@ -13,7 +13,7 @@ class Post(Base):
     anonimo = Column(Boolean, default=False)
     usuario_id = Column(Integer, ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
     disciplina_id = Column(Integer, ForeignKey("disciplica.id", ondelete="CASCADE"), nullable=False)
-    criado_em = Column(DateTime(timezone=True), default=datetime.now(timezone.utc))
+    criado_em = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     
     
     usuario = relationship("Usuario", back_populates="posts")
