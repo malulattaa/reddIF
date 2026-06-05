@@ -2,9 +2,9 @@ import os
 import jwt
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from database import get_db
+from app.database import get_db
 from fastapi.security import OAuth2PasswordBearer
-from models.usuario import Usuario
+from app.models.usuario import Usuario
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -28,7 +28,7 @@ def obter_usuario_logado(token: str = Depends(oauth2_scheme), db: Session = Depe
         if usuario_id is None:
             raise erro_autenticacao
         
-    except jwt.PyJWKError:
+    except jwt.PyJWTError:
         raise erro_autenticacao
     
     usuario = db.query(Usuario).filter(Usuario.id == int(usuario_id)).first()

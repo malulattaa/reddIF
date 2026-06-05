@@ -1,8 +1,8 @@
-from schemas.usuario import TokenResponse, UsuarioLogin
+from app.schemas.usuario import TokenResponse, UsuarioLogin
 import jwt
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
-from models.usuario import Usuario
+from app.models.usuario import Usuario
 from fastapi import HTTPException, status
 import os
 from dotenv import load_dotenv

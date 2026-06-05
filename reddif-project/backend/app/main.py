@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.database import Base, engine
 from app.routers.auth import router_auth
 
+from app.models import usuario, duvida, resposta, tag, disciplina, curtida_post, curtida_resposta, conquista, usuario_conquista
+
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
