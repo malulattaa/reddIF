@@ -8,7 +8,8 @@ class Resposta(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     conteudo = Column(String, nullable=False)
-    verificada = Column(Boolean, default=False)
+    solucao = Column(Boolean, default=False)
+    votos = Column(Integer, default=0)
     usuario_id = Column(Integer, ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
     post_id = Column(Integer, ForeignKey("posts.id", ondelete="CASCADE"), nullable=False)
     criado_em = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))

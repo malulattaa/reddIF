@@ -16,5 +16,3 @@ class Tag(Base):
     nome = Column(String, nullable=False, unique=True)
     
     posts = relationship("Post", secondary=post_tag, back_populates="tags")
-    
-    

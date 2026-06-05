@@ -2,8 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import Base, engine
 from app.routers.auth import router_auth
-
-from app.models import usuario, duvida, resposta, tag, disciplina, curtida_post, curtida_resposta, conquista, usuario_conquista
+from app.models import duvida, resposta, tag, usuario
 
 Base.metadata.create_all(bind=engine)
 
@@ -13,8 +12,6 @@ app = FastAPI(
     version="1.0.0"
 )
 
-app.include_router(router_auth)
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000", "http://localhost:5173"],
@@ -22,6 +19,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(router_auth)
 
 @app.get("/")
 def root():
