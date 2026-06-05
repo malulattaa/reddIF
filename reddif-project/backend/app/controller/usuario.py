@@ -17,7 +17,7 @@ ACESS_TOKEN_EXPIRE = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
 
 def gerar_token_acesso(dados: dict) -> str:
     dados_para_criptografar = dados.copy()
-    tempo_expiracao = datetime.now(timezone.utc) + timedelta(minutes=ACESS_TOKEN_EXPIRE)
+    tempo_expiracao = datetime.now(timezone.utc) + timedelta(minutes=int(ACESS_TOKEN_EXPIRE))
     dados_para_criptografar.update({"exp": tempo_expiracao})
     
     token_jwt = jwt.encode(dados_para_criptografar, SECRET_KEY, algorithm=ALGORITHM)
@@ -25,7 +25,7 @@ def gerar_token_acesso(dados: dict) -> str:
 
 
 async def login_usuario(dados: UsuarioLogin, session: Session):
-    usuario = session.query(Usuario).filter(Usuario.email == dados.email). first
+    usuario = session.query(Usuario).filter(Usuario.email == dados.email). first()
     
     if not usuario or not usuario.verificar_senha(dados.senha):
         raise HTTPException(status_code=401, detail="E-mail ou senha incorretos")

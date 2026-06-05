@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import Base, engine
+from app.routers.auth import router_auth
 
 Base.metadata.create_all(bind=engine)
 
@@ -9,6 +10,8 @@ app = FastAPI(
     description="API da plataforma colaborativa de monitoria do IFMS",
     version="1.0.0"
 )
+
+app.include_router(router_auth)
 
 app.add_middleware(
     CORSMiddleware,

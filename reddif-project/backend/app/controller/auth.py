@@ -23,7 +23,7 @@ def obter_usuario_logado(token: str = Depends(oauth2_scheme), db: Session = Depe
     
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        usuario_id = str = payload.get("sub")
+        usuario_id: str = payload.get("sub")
         
         if usuario_id is None:
             raise erro_autenticacao
@@ -31,7 +31,7 @@ def obter_usuario_logado(token: str = Depends(oauth2_scheme), db: Session = Depe
     except jwt.PyJWKError:
         raise erro_autenticacao
     
-    usuario = db.query(Usuario).filter(Usuario.id == int(usuario_id)).first
+    usuario = db.query(Usuario).filter(Usuario.id == int(usuario_id)).first()
     if usuario is None:
         raise erro_autenticacao
     
