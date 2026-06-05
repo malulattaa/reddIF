@@ -2,7 +2,7 @@ from app.database import Base
 from sqlalchemy.orm import relationship
 from sqlalchemy import Integer, String, Column, Boolean, DateTime, ForeignKey
 from datetime import timezone, datetime
-from tag import post_tag
+from app.models.tag import post_tag
 
 
 class Post(Base):

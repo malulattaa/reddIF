@@ -1,12 +1,12 @@
-from database import get_db
+from app.database import get_db
 from fastapi import APIRouter, Depends
-from schemas.duvida import PostResponseSchema, PostCreateSchema
+from app.schemas.duvida import PostResponseSchema, PostCreateSchema
 from sqlalchemy.orm import Session
-from controller.post import criar_post_controller
-from controller.usuario import login_usuario
-from schemas.usuario import UsuarioLogin, TokenResponse
-from models.usuario import Usuario
-from controller.auth import obter_usuario_logado
+from app.controller.post import criar_post_controller
+from app.controller.usuario import login_usuario
+from app.schemas.usuario import UsuarioLogin, TokenResponse
+from app.models.usuario import Usuario
+from app.controller.auth import obter_usuario_logado
 
 
 router_auth = APIRouter(prefix="/auth")
