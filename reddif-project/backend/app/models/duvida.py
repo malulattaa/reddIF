@@ -19,5 +19,6 @@ class Post(Base):
     
     usuario = relationship("Usuario", back_populates="posts")
     disciplina = relationship("Disciplina", back_populates="posts")
+    curtidas = relationship("CurtidaPost", back_populates="post")
     respostas = relationship("Resposta", back_populates="post", cascade="all, delete-orphan")
     tags = relationship("Tag", secondary=post_tag, back_populates="posts")

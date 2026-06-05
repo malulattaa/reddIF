@@ -44,4 +44,4 @@ class Usuario(Base):
         return pwd_context.verify(senha_pura, self.senha)
     
     def hash_senha(self, senha_pura: str):
-        self.senha = pwd_context.hash(senha_pura)
+        self.senha = pwd_context.hash(str(senha_pura))
