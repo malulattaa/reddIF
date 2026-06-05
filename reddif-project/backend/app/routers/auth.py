@@ -11,7 +11,7 @@ from controller.auth import obter_usuario_logado
 
 router_auth = APIRouter(prefix="/auth")
 
-@router_auth.post("/post", resposta = PostResponseSchema)
+@router_auth.post("/post", response_model = PostResponseSchema)
 async def criar_post(dados: PostCreateSchema, usuario: Usuario = Depends(obter_usuario_logado), session: Session = Depends(get_db)):
     return await criar_post(dados, usuario.id, session)
 
