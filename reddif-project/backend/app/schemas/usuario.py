@@ -12,6 +12,10 @@ class UsuarioLogin(BaseModel):
     email: EmailStr
     senha: str
     
+class TokenResponse(BaseModel):
+    acess_token: str
+    token_type: str
+    
 class UsuarioResponse(BaseModel):
     id: int
     nome: str
