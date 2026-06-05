@@ -14,4 +14,5 @@ class Resposta(Base):
     criado_em = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     
     usuario = relationship("Usuario", back_populates="respostas")
+    curtidas = relationship("CurtidaResposta", back_populates="resposta")
     post = relationship("Post", back_populates="respostas")
