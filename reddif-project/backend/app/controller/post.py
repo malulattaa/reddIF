@@ -4,7 +4,7 @@ from schemas.duvida import PostCreateSchema
 from models.duvida import Post
 from sqlalchemy.exc import IntegrityError
 
-def criar_post(dados: PostCreateSchema, id_usuario: int, session: Session):
+def criar_post_controller(dados: PostCreateSchema, id_usuario: int, session: Session):
     try:   
         novo_post = Post(
             titulo = dados.titulo,
