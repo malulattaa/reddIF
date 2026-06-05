@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from schemas.duvida import PostCreateSchema
-from models.duvida import Post
+from app.schemas.duvida import PostCreateSchema
+from app.models.duvida import Post
 from sqlalchemy.exc import IntegrityError
 
 def criar_post_controller(dados: PostCreateSchema, id_usuario: int, session: Session):
