@@ -4,14 +4,14 @@ from schemas.duvida import PostCreateSchema
 from models.duvida import Post
 from sqlalchemy.exc import IntegrityError
 
-def criarPost(dados: PostCreateSchema, id_usuario: int, session: Session):
+def criar_post(dados: PostCreateSchema, id_usuario: int, session: Session):
     try:   
         novo_post = Post(
             titulo = dados.titulo,
             descricao = dados.descricao,
             anonimo = dados.anonimo,
             usuario_id = id_usuario,
-            disciplina_id = dados.disciplia_id
+            disciplina_id = dados.disciplina_id
         )
         
         session.add(novo_post)
