@@ -57,4 +57,4 @@ async def login_usuario(dados: UsuarioLogin, session: Session):
     
     token = gerar_token_acesso(dados={"sub": str(usuario.id)})
     
-    return {"acess_token": token, "token_type": "bearer"}
+    return {"access_token": token, "token_type": "bearer"}

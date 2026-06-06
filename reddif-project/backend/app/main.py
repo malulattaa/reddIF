@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import Base, engine
 from app.routers.auth import router_auth
-from app.models import duvida, resposta, tag, usuario
+from app.models import duvida, resposta, tag, usuario, disciplina, curtida_resposta, curtida_post, conquista, usuario_conquista  # ← adicionar disciplina
 
 Base.metadata.create_all(bind=engine)
 
