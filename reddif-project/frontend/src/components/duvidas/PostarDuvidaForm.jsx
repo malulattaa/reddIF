@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { obterDisciplinas, publicarDuvida } from '../services/duvidas.js';
 
 
 export default function PostarDuvidaForm() {
@@ -22,13 +21,10 @@ export default function PostarDuvidaForm() {
   const [listaDisciplinas, setListaDisciplinas] = useState([])
   const [carregandoDisciplinas, setCarregandoDisciplinas] = useState(true)
 
-  
-// ================ SIMULAÇÃO PRA TESTA ================
+
   useEffect(() => {
     async function buscarDisciplinas() {
       try {
-   
-        // Mock: Simulando os dados vindo do banco
         await new Promise(resolve => setTimeout(resolve, 600))
         setListaDisciplinas([
             { id: 1, nome: 'Banco de Dados' },
@@ -78,10 +74,8 @@ export default function PostarDuvidaForm() {
     setIsSubmitting(true)
 
     try {
-      // Mock de envio (substituir pelo axios.post depois)
       await new Promise(resolve => setTimeout(resolve, 1500))
-      alert('Dúvida publicada com sucesso!')
-      navigate('/feed')
+      navigate('/feed', { state: { postado: true } })
     } catch (error) {
       console.error("Erro na API:", error)
       const mensagemServidor = error.response?.data?.detail 
@@ -180,11 +174,12 @@ export default function PostarDuvidaForm() {
         )}
 
         <div>
-          <label className="block text-sm font-semibold text-gray-800 mb-1">
+          <label htmlFor="titulo" className="block text-sm font-semibold text-gray-800 mb-1">
             Título da dúvida <span className="text-red-500">*</span>
           </label>
-          <input 
-            type="text" 
+          <input
+            id="titulo"
+            type="text"
             value={titulo}
             onChange={(e) => setTitulo(e.target.value)}
             placeholder="Ex: Como implementar autenticação JWT em Node.js?"
@@ -193,10 +188,11 @@ export default function PostarDuvidaForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-gray-800 mb-1">
+          <label htmlFor="disciplina" className="block text-sm font-semibold text-gray-800 mb-1">
             Disciplina <span className="text-red-500">*</span>
           </label>
-          <select 
+          <select
+            id="disciplina"
             value={disciplina}
             onChange={(e) => setDisciplina(e.target.value)}
             disabled={carregandoDisciplinas} 
@@ -207,7 +203,7 @@ export default function PostarDuvidaForm() {
             </option>
             
             {listaDisciplinas.map((item) => (
-              <option key={item.id} value={item.slug}>
+              <option key={item.id} value={item.id}>
                 {item.nome}
               </option>
             ))}
@@ -215,10 +211,11 @@ export default function PostarDuvidaForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-gray-800 mb-1">
+          <label htmlFor="descricao" className="block text-sm font-semibold text-gray-800 mb-1">
             Descrição detalhada <span className="text-red-500">*</span>
           </label>
-          <textarea 
+          <textarea
+            id="descricao"
             rows="5"
             value={descricao}
             onChange={(e) => setDescricao(e.target.value)}
@@ -228,7 +225,7 @@ export default function PostarDuvidaForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-gray-800 mb-1 flex items-center gap-1.5">
+          <label htmlFor="tag-input" className="text-sm font-semibold text-gray-800 mb-1 flex items-center gap-1.5">
             <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
               <line x1="7" y1="7" x2="7.01" y2="7" />
@@ -236,8 +233,9 @@ export default function PostarDuvidaForm() {
             Tags (opcional)
           </label>
           <div className="flex gap-2">
-            <input 
-              type="text" 
+            <input
+              id="tag-input"
+              type="text"
               value={tagInput}
               onChange={(e) => setTagInput(e.target.value)}
               placeholder="Ex: JavaScript, React, etc."

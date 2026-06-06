@@ -1,6 +1,6 @@
 import Navbar from '../components/Navbar'
-import PostarDuvidaForm from '../components/PostarDuvidaForm'
-import DicasDuvida from '../components/DicasDuvida'
+import PostarDuvidaForm from '../components/duvidas/PostarDuvidaForm'
+import DicasDuvida from '../components/duvidas/DicasDuvida'
 
 export default function PostarDuvida() {
   return (

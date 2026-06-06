@@ -1,13 +1,7 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 export default function Navbar() {
   const location = useLocation()
-  const navigate = useNavigate()
-
-  function handleLogout() {
-    localStorage.removeItem('token')
-    navigate('/login')
-  }
 
   return (
     <nav className="w-full bg-white border-b border-gray-100 px-8 py-3 flex items-center justify-between shadow-sm">
