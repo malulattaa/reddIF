@@ -62,3 +62,11 @@ class RespostaResponseSchema(BaseModel):
 class PostDetalheSchema(PostResponseSchema):
     respostas: list[RespostaResponseSchema] = []
     
+
+    
+class DisciplinaSchema(BaseModel):
+    id: int
+    nome: str
+
+    class Config:
+        from_attributes = True

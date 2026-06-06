@@ -1,46 +1,28 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-
+import { obterDisciplinas, publicarDuvida } from '../../services/duvidas'
 
 export default function PostarDuvidaForm() {
   const navigate = useNavigate()
-  
- 
+
   const [titulo, setTitulo] = useState('')
   const [disciplina, setDisciplina] = useState('')
   const [descricao, setDescricao] = useState('')
   const [anonimo, setAnonimo] = useState(false)
   const [tagInput, setTagInput] = useState('')
   const [tags, setTags] = useState([])
-  
-  
+
   const [erro, setErro] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  
 
   const [listaDisciplinas, setListaDisciplinas] = useState([])
   const [carregandoDisciplinas, setCarregandoDisciplinas] = useState(true)
 
-
   useEffect(() => {
-    async function buscarDisciplinas() {
-      try {
-        await new Promise(resolve => setTimeout(resolve, 600))
-        setListaDisciplinas([
-            { id: 1, nome: 'Banco de Dados' },
-            { id: 2, nome: 'Algoritmos e Lógica' },
-            { id: 3, nome: 'Desenvolvimento Web' },
-            { id: 4, nome: 'Engenharia de Software' }
-          ])
-      } catch (error) {
-        console.error("Erro ao carregar disciplinas:", error)
-        setErro("Não foi possível carregar as disciplinas do sistema.")
-      } finally {
-        setCarregandoDisciplinas(false)
-      }
-    }
-
-    buscarDisciplinas()
+    obterDisciplinas()
+      .then(setListaDisciplinas)
+      .catch(() => setErro('Não foi possível carregar as disciplinas.'))
+      .finally(() => setCarregandoDisciplinas(false))
   }, [])
 
   function handleAddTag(e) {
@@ -64,93 +46,26 @@ export default function PostarDuvidaForm() {
       return
     }
 
-    const novaDuvida = { 
-        titulo, 
-        disciplina_id: Number(disciplina), 
-        descricao, 
-        tags, 
-        anonimo 
-      }
     setIsSubmitting(true)
-
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500))
+      await publicarDuvida({
+        titulo,
+        disciplina_id: Number(disciplina),
+        descricao,
+        anonimo,
+      })
       navigate('/feed', { state: { postado: true } })
     } catch (error) {
-      console.error("Erro na API:", error)
-      const mensagemServidor = error.response?.data?.detail 
-      setErro(mensagemServidor || 'Ocorreu um erro ao conectar com o servidor. Tente novamente.')
+      const mensagemServidor = error.response?.data?.detail
+      setErro(mensagemServidor || 'Ocorreu um erro ao publicar sua dúvida. Tente novamente.')
     } finally {
       setIsSubmitting(false)
     }
   }
 
-
-// ======================== FUNCIONA COM O BACK ===============================
-// useEffect(() => {
-//     async function carregarDisciplinas() {
-//       try {
-//         const dados = await obterDisciplinas();
-//         setListaDisciplinas(dados);
-//       } catch (error) {
-//         console.error("Erro ao carregar disciplinas:", error);
-//         setErro("Não foi possível carregar as disciplinas.");
-//       } finally {
-//         setCarregandoDisciplinas(false);
-//       }
-//     }
-//     carregarDisciplinas();
-//   }, [])
-
-//   function handleAddTag(e) {
-//     e.preventDefault()
-//     if (tagInput.trim() && !tags.includes(tagInput.trim())) {
-//       setTags([...tags, tagInput.trim()])
-//       setTagInput('')
-//     }
-//   }
-
-//   function handleRemoveTag(tagToRemove) {
-//     setTags(tags.filter(tag => tag !== tagToRemove))
-//   }
-
-
-//   async function handleSubmit(e) {
-//     e.preventDefault()
-//     setErro('')
-
-//     if (!titulo.trim() || !disciplina || !descricao.trim()) {
-//       setErro('Por favor, preencha todos os campos obrigatórios (*).')
-//       return
-//     }
-
-//     const novaDuvida = { 
-//         titulo, 
-//         disciplina_id: Number(disciplina), 
-//         descricao, 
-//         tags, 
-//         anonimo 
-//     }
-    
-//     setIsSubmitting(true)
-
-//     try {
-//       await publicarDuvida(novaDuvida);
-//       alert('Dúvida publicada com sucesso!')
-//       navigate('/feed')
-//     } catch (error) {
-//       console.error("Erro na API:", error)
-//       const mensagemServidor = error.response?.data?.detail 
-//       setErro(mensagemServidor || 'Ocorreu um erro ao publicar sua dúvida.')
-//     } finally {
-//       setIsSubmitting(false)
-//     }
-//   }
-
-
   return (
     <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm">
-      
+
       <div className="flex items-center gap-4 mb-8 pb-6 border-b border-gray-100">
         <div className="bg-[#fff0e6] w-12 h-12 rounded-xl flex items-center justify-center text-orange-500 shrink-0">
           <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -166,7 +81,7 @@ export default function PostarDuvidaForm() {
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-        
+
         {erro && (
           <div className="bg-red-50 text-red-600 p-4 rounded-lg text-sm font-medium border border-red-100">
             {erro}
@@ -195,13 +110,12 @@ export default function PostarDuvidaForm() {
             id="disciplina"
             value={disciplina}
             onChange={(e) => setDisciplina(e.target.value)}
-            disabled={carregandoDisciplinas} 
+            disabled={carregandoDisciplinas}
             className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all bg-white text-gray-600 disabled:bg-gray-100 disabled:text-gray-400"
           >
             <option value="">
               {carregandoDisciplinas ? 'Carregando disciplinas...' : 'Selecione uma disciplina'}
             </option>
-            
             {listaDisciplinas.map((item) => (
               <option key={item.id} value={item.id}>
                 {item.nome}
@@ -241,7 +155,7 @@ export default function PostarDuvidaForm() {
               placeholder="Ex: JavaScript, React, etc."
               className="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
             />
-            <button 
+            <button
               onClick={handleAddTag}
               type="button"
               className="bg-[#fff0e6] text-orange-600 hover:bg-orange-100 font-semibold px-6 py-2.5 rounded-lg text-sm transition-colors"
@@ -249,7 +163,7 @@ export default function PostarDuvidaForm() {
               Adicionar
             </button>
           </div>
-          
+
           {tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-3">
               {tags.map(tag => (
@@ -266,11 +180,11 @@ export default function PostarDuvidaForm() {
 
         <label className="bg-[#fff0e6] border border-orange-100 rounded-xl p-4 flex gap-4 cursor-pointer hover:bg-orange-50/50 transition-colors">
           <div className="pt-0.5">
-            <input 
-              type="checkbox" 
+            <input
+              type="checkbox"
               checked={anonimo}
               onChange={(e) => setAnonimo(e.target.checked)}
-              className="w-4 h-4 text-orange-500 rounded border-gray-300 focus:ring-orange-500" 
+              className="w-4 h-4 text-orange-500 rounded border-gray-300 focus:ring-orange-500"
             />
           </div>
           <div>
@@ -288,18 +202,18 @@ export default function PostarDuvidaForm() {
         </label>
 
         <div className="flex gap-3 pt-4 border-t border-gray-100 mt-2">
-          <button 
+          <button
             type="submit"
             disabled={isSubmitting}
             className={`font-semibold py-3 px-8 rounded-xl text-sm flex-1 transition-colors ${
-              isSubmitting 
-                ? 'bg-orange-300 cursor-not-allowed text-white' 
+              isSubmitting
+                ? 'bg-orange-300 cursor-not-allowed text-white'
                 : 'bg-orange-500 hover:bg-orange-600 text-white'
             }`}
           >
             {isSubmitting ? 'Publicando...' : 'Publicar dúvida'}
           </button>
-          <button 
+          <button
             type="button"
             onClick={() => navigate('/feed')}
             disabled={isSubmitting}

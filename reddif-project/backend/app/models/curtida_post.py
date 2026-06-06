@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 
 class CurtidaPost(Base):
     __tablename__ = "curtidas_post"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     usuario_id = Column(Integer, ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
     post_id = Column(Integer, ForeignKey("posts.id", ondelete="CASCADE"), nullable=False)
