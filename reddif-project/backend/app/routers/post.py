@@ -1,90 +1,71 @@
-# controller/post.py
-
-from fastapi import HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from sqlalchemy.exc import IntegrityError
-from app.models.duvida import Post
-from app.models.resposta import Resposta
-from app.models.tag import Tag
-from app.schemas.post import PostCreateSchema, RespostaCreateSchema
+
+from app.database import get_db
+from app.schemas.post import (
+    PostCreateSchema, PostResponseSchema,
+    RespostaCreateSchema, RespostaResponseSchema,
+    PostDetalheSchema
+)
+from app.controller.post import (
+    criar_post_controller,
+    obter_post_controller,
+    criar_resposta_controller,
+    marcar_solucao_controller,
+)
+from app.controller.usuario import login_usuario, cadastrar_usuario
+from app.schemas.usuario import UsuarioLogin, TokenResponse, UsuarioCreate, UsuarioResponse
+from app.models.usuario import Usuario
+from app.controller.auth import obter_usuario_logado
+
+router_auth = APIRouter(prefix="/auth")
 
 
-def criar_post_controller(dados: PostCreateSchema, usuario_id: int, session: Session):
-    try:
-        tags_obj = []
-        for nome_tag in dados.tags:
-            tag = session.query(Tag).filter(Tag.nome == nome_tag).first()
-            if not tag:
-                tag = Tag(nome=nome_tag)
-                session.add(tag)
-            tags_obj.append(tag)
-
-        novo_post = Post(
-            titulo=dados.titulo,
-            descricao=dados.descricao,
-            disciplina_id=dados.disciplina_id,
-            anonimo=dados.anonimo,
-            tags=tags_obj,
-            usuario_id=usuario_id,
-        )
-        session.add(novo_post)
-        session.commit()
-        session.refresh(novo_post)
-        return novo_post
-
-    except IntegrityError:
-        session.rollback()
-        raise HTTPException(400, "Verifique se a disciplina ou usuário existem.")
-
-    except Exception as e:
-        session.rollback()
-        raise HTTPException(500, f"Erro interno: {str(e)}")
+@router_auth.post("/cadastro", response_model=UsuarioResponse)
+async def cadastro(dados: UsuarioCreate, session: Session = Depends(get_db)):
+    return await cadastrar_usuario(dados, session)
 
 
-def obter_post_controller(post_id: int, session: Session):
-    post = session.get(Post, post_id)
-    if not post:
-        raise HTTPException(404, "Post não encontrado")
-    return post
+@router_auth.post("/login", response_model=TokenResponse)
+async def login(dados: UsuarioLogin, session: Session = Depends(get_db)):
+    return await login_usuario(dados, session)
 
 
-def criar_resposta_controller(post_id: int, dados: RespostaCreateSchema, usuario_id: int, session: Session):
-    post = session.get(Post, post_id)
-    if not post:
-        raise HTTPException(404, "Post não encontrado")
-    if post.resolvido:
-        raise HTTPException(400, "Post já resolvido")
-
-    try:
-        resposta = Resposta(
-            conteudo=dados.conteudo,
-            post_id=post_id,
-            usuario_id=usuario_id,
-        )
-        session.add(resposta)
-        session.commit()
-        session.refresh(resposta)
-        return resposta
-
-    except Exception as e:
-        session.rollback()
-        raise HTTPException(500, f"Erro interno: {str(e)}")
+@router_auth.post("/post", response_model=PostResponseSchema, status_code=201)
+async def criar_post(
+    dados: PostCreateSchema,
+    usuario: Usuario = Depends(obter_usuario_logado),
+    session: Session = Depends(get_db)
+):
+    return criar_post_controller(dados, usuario.id, session)
 
 
-def marcar_solucao_controller(post_id: int, resposta_id: int, usuario_id: int, session: Session):
-    post = session.get(Post, post_id)
-    if not post:
-        raise HTTPException(404, "Post não encontrado")
-    if post.usuario_id != usuario_id:
-        raise HTTPException(403, "Só o autor pode marcar a solução")
+@router_auth.get("/post/{post_id}", response_model=PostDetalheSchema)
+async def obter_post(post_id: int, session: Session = Depends(get_db)):
+    return obter_post_controller(post_id, session)
 
-    resposta = session.get(Resposta, resposta_id)
-    if not resposta or resposta.post_id != post_id:
-        raise HTTPException(404, "Resposta não encontrada")
 
-    for r in post.respostas:
-        r.solucao = False
-    resposta.solucao = True
-    post.resolvido = True
-    session.commit()
-    return {"ok": True}
+@router_auth.post("/post/{post_id}/respostas", response_model=RespostaResponseSchema, status_code=201)
+async def criar_resposta(
+    post_id: int,
+    dados: RespostaCreateSchema,
+    usuario: Usuario = Depends(obter_usuario_logado),
+    session: Session = Depends(get_db)
+):
+    return criar_resposta_controller(post_id, dados, usuario.id, session)
+
+
+@router_auth.patch("/post/{post_id}/resolver/{resposta_id}")
+async def marcar_solucao(
+    post_id: int,
+    resposta_id: int,
+    usuario: Usuario = Depends(obter_usuario_logado),
+    session: Session = Depends(get_db)
+):
+    return marcar_solucao_controller(post_id, resposta_id, usuario.id, session)
+
+
+@router_auth.get("/disciplinas")
+async def listar_disciplinas(session: Session = Depends(get_db)):
+    from app.models.disciplina import Disciplina
+    return session.query(Disciplina).all()

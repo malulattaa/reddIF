@@ -41,7 +41,9 @@ class Usuario(Base):
     curtidas_resposta = relationship("CurtidaResposta", back_populates="usuario")
     
     def verificar_senha(self, senha_pura: str):
+        senha_pura = senha_pura.encode("utf-8")[:72].decode("utf-8", errors="ignore")
         return pwd_context.verify(senha_pura, self.senha)
-    
+
     def hash_senha(self, senha_pura: str):
-        self.senha = pwd_context.hash(str(senha_pura))
+        senha_pura = senha_pura.encode("utf-8")[:72].decode("utf-8", errors="ignore")
+        self.senha = pwd_context.hash(senha_pura)
