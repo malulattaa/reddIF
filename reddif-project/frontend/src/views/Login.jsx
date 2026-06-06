@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import LoginHero from '../components/LoginHero.jsx'
-import LoginForm from '../components/LoginForm.jsx'
+import LoginHero from '../components/login/LoginHero.jsx'
+import LoginForm from '../components/login/LoginForm.jsx'
 
 export default function Login() {
   const navigate = useNavigate()

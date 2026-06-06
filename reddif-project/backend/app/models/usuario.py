@@ -3,6 +3,9 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.database import Base
 import enum
+from passlib.context import CryptContext
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class TipoUsuario(enum.Enum):
     aluno = "aluno"
@@ -34,3 +37,13 @@ class Usuario(Base):
     posts = relationship("Post", back_populates="usuario")
     respostas = relationship("Resposta", back_populates="usuario")
     conquistas = relationship("UsuarioConquista", back_populates="usuario")
+    curtidas_post = relationship("CurtidaPost", back_populates="usuario")
+    curtidas_resposta = relationship("CurtidaResposta", back_populates="usuario")
+    
+    def verificar_senha(self, senha_pura: str):
+        senha_pura = senha_pura.encode("utf-8")[:72].decode("utf-8", errors="ignore")
+        return pwd_context.verify(senha_pura, self.senha)
+
+    def hash_senha(self, senha_pura: str):
+        senha_pura = senha_pura.encode("utf-8")[:72].decode("utf-8", errors="ignore")
+        self.senha = pwd_context.hash(senha_pura)
