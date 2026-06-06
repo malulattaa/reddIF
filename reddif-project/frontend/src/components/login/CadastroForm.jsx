@@ -14,7 +14,7 @@ const cursos = [
 
 export default function CadastroForm() {
   const navigate = useNavigate()
-  const [form, setForm] = useState({ nome: '', email: '', senha: '', curso: cursos[0] })
+  const [form, setForm] = useState({ nome: '', email: '', senha: '', confirmarSenha: '', curso: cursos[0] })
   const [erro, setErro] = useState('')
   const [carregando, setCarregando] = useState(false)
 
@@ -25,6 +25,10 @@ export default function CadastroForm() {
   async function handleSubmit(e) {
     e.preventDefault()
     setErro('')
+    if (form.senha !== form.confirmarSenha) {
+      setErro('As senhas não coincidem.')
+      return
+    }
     setCarregando(true)
     try {
       await cadastrar(form.nome, form.email, form.senha, form.curso)
@@ -79,6 +83,20 @@ export default function CadastroForm() {
               type="password"
               placeholder="••••••••"
               value={form.senha}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-orange-400 transition"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="confirmar-senha" className="block text-sm font-medium text-gray-800 mb-1">Confirmar senha</label>
+            <input
+              id="confirmar-senha"
+              name="confirmarSenha"
+              type="password"
+              placeholder="••••••••"
+              value={form.confirmarSenha}
               onChange={handleChange}
               required
               className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-orange-400 transition"
