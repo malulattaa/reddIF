@@ -61,3 +61,4 @@ class RespostaResponseSchema(BaseModel):
 
 class PostDetalheSchema(PostResponseSchema):
     respostas: list[RespostaResponseSchema] = []
+    
