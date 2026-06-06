@@ -1,10 +1,12 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from app.models.duvida import Post
 from app.models.resposta import Resposta
+from app.models.curtida_post import CurtidaPost
 from app.models.tag import Tag
 from app.schemas.post import PostCreateSchema, RespostaCreateSchema
+from sqlalchemy.exc import SQLAlchemyError
 
 
 def criar_post_controller(dados: PostCreateSchema, usuario_id: int, session: Session):
@@ -86,3 +88,32 @@ def marcar_solucao_controller(post_id: int, resposta_id: int, usuario_id: int, s
     post.resolvido = True
     session.commit()
     return {"ok": True}
+
+
+async def curtida_post(post_id: int, usuario_id: int, session: Session):
+    post = session.query(Post).filter(Post.id == post_id).first()
+    
+    if not post:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Post não encontrado.")
+    
+    try:
+        curtida_existente = session.query(CurtidaPost).filter(CurtidaPost.post_id == post_id, CurtidaPost.usuario_id == usuario_id).first()
+        
+        if curtida_existente:
+            session.delete(curtida_existente)
+            session.commit()
+            raise HTTPException(status_code=status.HTTP_200_OK, detail="Curtida removida com sucesso.")
+        
+        nova_curtida = CurtidaPost(post_id=post_id, usuario_id=usuario_id)
+        session.add(nova_curtida)
+        session.commit()
+        
+        return {"detail": "Post curtido com sucesso."}
+    
+    except SQLAlchemyError as e:
+        # Se der qualquer erro de banco de dados (ex: tabela travada, coluna errada)
+        session.rollback() # Desfaz qualquer alteração para não quebrar o banco
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Erro interno no banco de dados ao processar a curtida. {str(e)}"
+        )
