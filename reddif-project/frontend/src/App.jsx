@@ -22,6 +22,7 @@ export default function App() {
         <Route path="/em-alta" element={<RotaProtegida><EmAlta /></RotaProtegida>} />
         <Route path="/postar" element={<RotaProtegida><PostarDuvida /></RotaProtegida>} />
         <Route path="/perfil" element={<RotaProtegida><Perfil /></RotaProtegida>} />
+        <Route path="/perfil" element={<RotaProtegida><Perfil /></RotaProtegida>} />
       </Routes>
     </BrowserRouter>
   )

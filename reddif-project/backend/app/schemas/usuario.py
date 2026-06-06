@@ -41,8 +41,23 @@ class PerfilRespostaUsuario(BaseModel):
     id: int
     conteudo: str
     post_id: int
-    criado_em: datetime      
-        
+    criado_em: datetime
+
+class ConquistaInfoResponse(BaseModel):
+    nome: str
+    descricao: str
+    icone: str
+
+    class Config:
+        from_attributes = True
+
+class ConquistaPerfilResponse(BaseModel):
+    conquista: ConquistaInfoResponse
+    conquistado_em: datetime
+
+    class Config:
+        from_attributes = True
+
 class UsuarioPerfilResponse(BaseModel):
     id: int
     nome: str
@@ -51,10 +66,11 @@ class UsuarioPerfilResponse(BaseModel):
     tipo: str
     pontos: int
     criado_em: datetime
-    
+
     posts: List[PostPerfilResponse]
     respostas: List[PerfilRespostaUsuario]
-    
-    class Config: 
+    conquistas: List[ConquistaPerfilResponse]
+
+    class Config:
         from_attributes = True
     
