@@ -1,12 +1,11 @@
 from fastapi import APIRouter, Depends
-from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.schemas.post import (
     PostCreateSchema, PostResponseSchema,
     RespostaCreateSchema, RespostaResponseSchema,
-    PostDetalheSchema
+    PostDetalheSchema, DisciplinaSchema
 )
 from app.controller.post import (
     criar_post_controller,
@@ -18,8 +17,6 @@ from app.controller.usuario import login_usuario, cadastrar_usuario
 from app.schemas.usuario import UsuarioLogin, TokenResponse, UsuarioCreate, UsuarioResponse, UsuarioPerfilResponse
 from app.models.usuario import Usuario
 from app.controller.auth import obter_usuario_logado
-
-from app.schemas.post import DisciplinaSchema
 
 
 router_auth = APIRouter(prefix="/auth")
@@ -35,44 +32,16 @@ async def login(dados: UsuarioLogin, session: Session = Depends(get_db)):
     return await login_usuario(dados, session)
 
 
-@router_auth.post("/post", response_model=PostResponseSchema, status_code=201)
-async def criar_post(
-    dados: PostCreateSchema,
-    usuario: Usuario = Depends(obter_usuario_logado),
-    session: Session = Depends(get_db)
-):
-    return criar_post_controller(dados, usuario.id, session)
-
-
-@router_auth.get("/post/{post_id}", response_model=PostDetalheSchema)
-async def obter_post(post_id: int, session: Session = Depends(get_db)):
-    return obter_post_controller(post_id, session)
-
-
-@router_auth.post("/post/{post_id}/respostas", response_model=RespostaResponseSchema, status_code=201)
-async def criar_resposta(
-    post_id: int,
-    dados: RespostaCreateSchema,
-    usuario: Usuario = Depends(obter_usuario_logado),
-    session: Session = Depends(get_db)
-):
-    return criar_resposta_controller(post_id, dados, usuario.id, session)
-
-
-@router_auth.patch("/post/{post_id}/resolver/{resposta_id}")
-async def marcar_solucao(
-    post_id: int,
-    resposta_id: int,
-    usuario: Usuario = Depends(obter_usuario_logado),
-    session: Session = Depends(get_db)
-):
-    return marcar_solucao_controller(post_id, resposta_id, usuario.id, session)
+@router_auth.get("/perfil", response_model=UsuarioPerfilResponse)
+async def perfil(usuario_atual: Usuario = Depends(obter_usuario_logado), session: Session = Depends(get_db)):
+    return usuario_atual
 
 
 @router_auth.get("/disciplinas", response_model=list[DisciplinaSchema])
 async def listar_disciplinas(session: Session = Depends(get_db)):
     from app.models.disciplina import Disciplina
     return session.query(Disciplina).all()
+
 
 @router_auth.get("/feed", response_model=list[PostResponseSchema])
 async def feed(
@@ -101,9 +70,7 @@ async def feed(
         )
         for post in posts
     ]
-@router_auth.get("/perfil", response_model=UsuarioPerfilResponse)
-async def perfil(usuario_atual: Usuario = Depends(obter_usuario_logado), session: Session = Depends(get_db)):
-    return usuario_atual
+
 
 @router_auth.post("/post", response_model=PostResponseSchema, status_code=201)
 async def criar_post(
@@ -113,9 +80,11 @@ async def criar_post(
 ):
     return criar_post_controller(dados, usuario.id, session)
 
+
 @router_auth.get("/post/{post_id}", response_model=PostDetalheSchema)
 async def obter_post(post_id: int, session: Session = Depends(get_db)):
     return obter_post_controller(post_id, session)
+
 
 @router_auth.post("/post/{post_id}/respostas", response_model=RespostaResponseSchema, status_code=201)
 async def criar_resposta(
@@ -126,6 +95,7 @@ async def criar_resposta(
 ):
     return criar_resposta_controller(post_id, dados, usuario.id, session)
 
+
 @router_auth.patch("/post/{post_id}/resolver/{resposta_id}")
 async def marcar_solucao(
     post_id: int,
@@ -134,5 +104,3 @@ async def marcar_solucao(
     session: Session = Depends(get_db)
 ):
     return marcar_solucao_controller(post_id, resposta_id, usuario.id, session)
-
-
