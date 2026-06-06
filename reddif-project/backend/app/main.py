@@ -120,9 +120,6 @@ app = FastAPI(
     version="1.0.0"
 )
 
-app.include_router(router_auth)
-app.include_router(router_duvidas)
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000", "http://localhost:5173", "http://localhost:5175"],
@@ -130,6 +127,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(router_auth)
+app.include_router(router_duvidas)
 
 @app.get("/")
 def root():
