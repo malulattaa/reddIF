@@ -1,68 +1,37 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import BuscaFiltros from '../components/feed/BuscaFiltros'
 import CardDuvida from '../components/feed/CardDuvida'
 import Toast from '../components/feed/Toast'
+import { obterDuvidas } from '../services/duvidas'
 
-const DUVIDAS_MOCK = [
-  {
-    id: 1,
-    autor: 'Ana Clara Miguel',
-    categoria: 'Programação Web',
-    tempo: 'há 2 horas',
-    titulo: 'Como implementar autenticação JWT em Node.js?',
-    descricao: 'Estou desenvolvendo uma API REST e preciso implementar autenticação com JWT. Alguém pode me ajudar com um exemplo prático?',
-    tags: ['Node.js', 'JWT', 'Segurança'],
-    curtidas: 15,
-    respostas: 8,
-    respondida: true,
-  },
-  {
-    id: 2,
-    autor: 'Anônimo',
-    categoria: 'Banco de Dados',
-    tempo: 'há 4 horas',
-    titulo: 'Dúvida sobre normalização de banco de dados',
-    descricao: 'Estou com dificuldade para entender quando usar 2FN e 3FN. Alguém pode explicar com exemplos?',
-    tags: ['SQL', 'Normalização', 'Modelagem'],
-    curtidas: 23,
-    respostas: 12,
-    respondida: false,
-  },
-  {
-    id: 3,
-    autor: 'Pedro Henrique',
-    categoria: 'Algoritmos',
-    tempo: 'há 6 horas',
-    titulo: 'Complexidade de algoritmos de ordenação',
-    descricao: 'Qual a diferença prática entre QuickSort e MergeSort em termos de desempenho? Quando usar cada um?',
-    tags: ['Algoritmos', 'Ordenação', 'Complexidade'],
-    curtidas: 9,
-    respostas: 5,
-    respondida: true,
-  },
-  {
-    id: 4,
-    autor: 'Maria Fernanda',
-    categoria: 'Desenvolvimento Front-end',
-    tempo: 'há 1 dia',
-    titulo: 'Como usar React Context API vs Redux?',
-    descricao: 'Para um projeto de médio porte, vale a pena usar Redux ou a Context API do React já é suficiente?',
-    tags: ['React', 'Redux', 'Estado'],
-    curtidas: 31,
-    respostas: 17,
-    respondida: false,
-  },
-]
+function tempoRelativo(dataISO) {
+  const diff = Math.floor((Date.now() - new Date(dataISO).getTime()) / 1000)
+  if (diff < 60) return 'agora mesmo'
+  if (diff < 3600) return `há ${Math.floor(diff / 60)} min`
+  if (diff < 86400) return `há ${Math.floor(diff / 3600)} hora${Math.floor(diff / 3600) > 1 ? 's' : ''}`
+  if (diff < 604800) return `há ${Math.floor(diff / 86400)} dia${Math.floor(diff / 86400) > 1 ? 's' : ''}`
+  return `há ${Math.floor(diff / 604800)} semana${Math.floor(diff / 604800) > 1 ? 's' : ''}`
+}
 
 export default function Feed() {
   const location = useLocation()
   const [busca, setBusca] = useState('')
   const [categoriaAtiva, setCategoriaAtiva] = useState('Todas')
   const [showToast, setShowToast] = useState(!!location.state?.postado)
+  const [duvidas, setDuvidas] = useState([])
+  const [carregando, setCarregando] = useState(true)
+  const [erro, setErro] = useState(false)
 
-  const duvidasFiltradas = DUVIDAS_MOCK.filter(d => {
+  useEffect(() => {
+    obterDuvidas()
+      .then(dados => setDuvidas(dados.map(d => ({ ...d, tempo: tempoRelativo(d.criado_em) }))))
+      .catch(() => setErro(true))
+      .finally(() => setCarregando(false))
+  }, [])
+
+  const duvidasFiltradas = duvidas.filter(d => {
     const matchCategoria = categoriaAtiva === 'Todas' || d.categoria === categoriaAtiva
     const q = busca.toLowerCase()
     const matchBusca = !busca || d.titulo.toLowerCase().includes(q) ||
@@ -82,13 +51,20 @@ export default function Feed() {
           setCategoriaAtiva={setCategoriaAtiva}
         />
 
-        {duvidasFiltradas.length > 0
-          ? duvidasFiltradas.map(d => <CardDuvida key={d.id} duvida={d} />)
-          : <p className="text-center text-gray-400 py-16 text-sm">Nenhuma dúvida encontrada.</p>
-        }
+        {carregando && (
+          <p className="text-center text-gray-400 py-16 text-sm">Carregando dúvidas...</p>
+        )}
+        {erro && (
+          <p className="text-center text-red-400 py-16 text-sm">Não foi possível carregar as dúvidas.</p>
+        )}
+        {!carregando && !erro && (
+          duvidasFiltradas.length > 0
+            ? duvidasFiltradas.map(d => <CardDuvida key={d.id} duvida={d} />)
+            : <p className="text-center text-gray-400 py-16 text-sm">Nenhuma dúvida encontrada.</p>
+        )}
       </main>
 
-      {showToast && <Toast mensagem="Pronto! O que você acha disso?" onClose={() => setShowToast(false)} />}
+      {showToast && <Toast mensagem="Dúvida publicada com sucesso!" onClose={() => setShowToast(false)} />}
     </div>
   )
 }
