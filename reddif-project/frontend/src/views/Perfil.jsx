@@ -1,7 +1,7 @@
 import Navbar from '../components/Navbar'
-import PerfilHeader from '../components/perfil/PerfilHeader'
-import PerfilStats from '../components/perfil/PerfilStats'
-import PerfilTabs from '../components/perfil/PerfilTabs'
+import PerfilHeader from '../perfil/PerfilHeader'
+import PerfilStats from '../perfil/PerfilStats'
+import PerfilTabs from '../perfil/PerfilTabs'
 
 export default function Perfil() {
   return (
