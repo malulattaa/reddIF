@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { cadastrar } from '../services/auth.js'
+import { cadastrar } from '../../services/auth.js'
 
 const cursos = [
   'Curso Técnico Integrado em Informática',

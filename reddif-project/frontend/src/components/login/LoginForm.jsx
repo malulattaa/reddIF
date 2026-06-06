@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { login } from '../services/auth.js'
+import { login } from '../../services/auth.js'
 
 export default function LoginForm({ onCadastro }) {
   const navigate = useNavigate()
