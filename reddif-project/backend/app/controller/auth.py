@@ -1,8 +1,7 @@
+from jose import jwt, JWTError
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt
 from sqlalchemy.orm import Session
-
 from app.database import get_db
 from app.models.usuario import Usuario
 from app.config import settings
@@ -26,7 +25,7 @@ def obter_usuario_logado(
     except JWTError:
         raise credencial_exception
 
-    usuario = db.get(Usuario, int(usuario_id))
+    usuario = db.query(Usuario).filter(Usuario.id == int(usuario_id)).first()
     if usuario is None:
         raise credencial_exception
 

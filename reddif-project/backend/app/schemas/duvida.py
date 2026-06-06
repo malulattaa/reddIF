@@ -20,3 +20,10 @@ class PostResponseSchema(BaseModel):
     
     class Config: 
         from_attributes = True
+        
+class PostPerfilResponse(BaseModel):
+    id: int
+    titulo: str
+    tag: str
+    criado_em: datetime
+    

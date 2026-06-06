@@ -1,20 +1,20 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { cadastrar } from '../services/auth.js'
+import { cadastrar } from '../../services/auth.js'
 
 const cursos = [
-  'Curso Técnico Integrado em Informática',
-  'Curso Técnico Integrado em Eletrotécnica',
-  'Curso Técnico Integrado em Administração',
-  'Tecnologia em Análise e Desenvolvimento de Sistemas',
-  'Tecnologia em Automação Industrial',
+  'Técnico em Informática',
+  'Técnico em eletrotécnica',
+  'Administração',
+  'Análise e Desenvolvimento de Sistemas',
   'Engenharia de Controle e Automação',
-  'Engenharia de Computação',
+  'Engenharia da Computação',
+  'Pós Graduação',
 ]
 
 export default function CadastroForm() {
   const navigate = useNavigate()
-  const [form, setForm] = useState({ nome: '', email: '', senha: '', curso: cursos[0] })
+  const [form, setForm] = useState({ nome: '', email: '', senha: '', confirmarSenha: '', curso: cursos[0] })
   const [erro, setErro] = useState('')
   const [carregando, setCarregando] = useState(false)
 
@@ -25,9 +25,13 @@ export default function CadastroForm() {
   async function handleSubmit(e) {
     e.preventDefault()
     setErro('')
+    if (form.senha !== form.confirmarSenha) {
+      setErro('As senhas não coincidem.')
+      return
+    }
     setCarregando(true)
     try {
-      await cadastrar(form.nome, form.email, form.senha, form.curso)
+      await cadastrar(form.nome, form.email, form.senha, form.confirmarSenha, form.curso)
       navigate('/login')
     } catch {
       setErro('Erro ao criar conta. Verifique os dados e tente novamente.')
@@ -44,8 +48,9 @@ export default function CadastroForm() {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <div>
-            <label className="block text-sm font-medium text-gray-800 mb-1">Nome completo</label>
+            <label htmlFor="nome" className="block text-sm font-medium text-gray-800 mb-1">Nome completo</label>
             <input
+              id="nome"
               name="nome"
               type="text"
               placeholder="Seu nome"
@@ -57,8 +62,9 @@ export default function CadastroForm() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-800 mb-1">Email institucional</label>
+            <label htmlFor="email-cadastro" className="block text-sm font-medium text-gray-800 mb-1">Email institucional</label>
             <input
+              id="email-cadastro"
               name="email"
               type="email"
               placeholder="seu.nome@estudante.ifms.edu.br"
@@ -70,8 +76,9 @@ export default function CadastroForm() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-800 mb-1">Senha</label>
+            <label htmlFor="senha-cadastro" className="block text-sm font-medium text-gray-800 mb-1">Senha</label>
             <input
+              id="senha-cadastro"
               name="senha"
               type="password"
               placeholder="••••••••"
@@ -83,8 +90,23 @@ export default function CadastroForm() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-800 mb-1">Curso</label>
+            <label htmlFor="confirmar-senha" className="block text-sm font-medium text-gray-800 mb-1">Confirmar senha</label>
+            <input
+              id="confirmar-senha"
+              name="confirmarSenha"
+              type="password"
+              placeholder="••••••••"
+              value={form.confirmarSenha}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-orange-400 transition"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="curso" className="block text-sm font-medium text-gray-800 mb-1">Curso</label>
             <select
+              id="curso"
               name="curso"
               value={form.curso}
               onChange={handleChange}

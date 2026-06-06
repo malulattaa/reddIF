@@ -1,4 +1,6 @@
 from fastapi import APIRouter, Depends
+from fastapi.security import OAuth2PasswordRequestForm
+from app.schemas.duvida import PostResponseSchema, PostCreateSchema
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -14,7 +16,7 @@ from app.controller.post import (
     marcar_solucao_controller,
 )
 from app.controller.usuario import login_usuario, cadastrar_usuario
-from app.schemas.usuario import UsuarioLogin, TokenResponse, UsuarioCreate, UsuarioResponse
+from app.schemas.usuario import UsuarioLogin, TokenResponse, UsuarioCreate, UsuarioResponse, UsuarioPerfilResponse
 from app.models.usuario import Usuario
 from app.controller.auth import obter_usuario_logado
 
@@ -100,3 +102,6 @@ async def feed(
         )
         for post in posts
     ]
+@router_auth.get("/perfil", response_model=UsuarioPerfilResponse)
+async def perfil(usuario_atual: Usuario = Depends(obter_usuario_logado), session: Session = Depends(get_db)):
+    return usuario_atual

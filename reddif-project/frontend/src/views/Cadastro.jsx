@@ -1,5 +1,5 @@
-import LoginHero from '../components/LoginHero.jsx'
-import CadastroForm from '../components/CadastroForm.jsx'
+import LoginHero from '../components/login/LoginHero.jsx'
+import CadastroForm from '../components/login/CadastroForm.jsx'
 
 export default function Cadastro() {
   return (
