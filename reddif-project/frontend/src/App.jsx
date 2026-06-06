@@ -5,11 +5,10 @@ import Feed from './views/Feed.jsx'
 import PostarDuvida from './views/PostarDuvida.jsx'
 import EmAlta from './views/EmAlta.jsx'
 
-// TODO: reativar quando o backend de auth estiver pronto
-// function RotaProtegida({ children }) {
-//   const token = localStorage.getItem('token')
-//   return token ? children : <Navigate to="/login" />
-// }
+function RotaProtegida({ children }) {
+  const token = localStorage.getItem('token')
+  return token ? children : <Navigate to="/login" />
+}
 
 export default function App() {
   return (
@@ -18,11 +17,9 @@ export default function App() {
         <Route path="/" element={<Navigate to="/feed" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
-        {/* <Route path="/feed" element={<RotaProtegida><Feed /></RotaProtegida>} /> */}
-        {/* <Route path="/postar" element={<RotaProtegida><PostarDuvida /></RotaProtegida>} /> */}
-        <Route path="/feed" element={<Feed />} />
-        <Route path="/em-alta" element={<EmAlta />} />
-        <Route path="/postar" element={<PostarDuvida />} />
+        <Route path="/feed" element={<RotaProtegida><Feed /></RotaProtegida>} />
+        <Route path="/em-alta" element={<RotaProtegida><EmAlta /></RotaProtegida>} />
+        <Route path="/postar" element={<RotaProtegida><PostarDuvida /></RotaProtegida>} />
       </Routes>
     </BrowserRouter>
   )

@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { cadastrar } from '../../services/auth.js'
 
 const cursos = [
-  'Curso Técnico Integrado em Informática',
-  'Curso Técnico Integrado em Eletrotécnica',
-  'Curso Técnico Integrado em Administração',
-  'Tecnologia em Análise e Desenvolvimento de Sistemas',
-  'Tecnologia em Automação Industrial',
+  'Técnico em Informática',
+  'Técnico em eletrotécnica',
+  'Administração',
+  'Análise e Desenvolvimento de Sistemas',
   'Engenharia de Controle e Automação',
-  'Engenharia de Computação',
+  'Engenharia da Computação',
+  'Pós Graduação',
 ]
 
 export default function CadastroForm() {
