@@ -1,23 +1,18 @@
-from app.schemas.usuario import TokenResponse, UsuarioLogin, UsuarioCreate
-import jwt
-from passlib.context import CryptContext
+from app.schemas.usuario import UsuarioLogin, UsuarioCreate
+from jose import jwt
 from sqlalchemy.orm import Session
 from app.models.usuario import Usuario
-from fastapi import HTTPException, status
-import os
-from dotenv import load_dotenv
+from fastapi import HTTPException
 from datetime import datetime, timezone, timedelta
+from app.config import settings
 
-
-load_dotenv() 
-
-SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = os.getenv("ALGORITHM", "HS256")
-ACESS_TOKEN_EXPIRE = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
+SECRET_KEY = settings.SECRET_KEY
+ALGORITHM = settings.ALGORITHM
+ACESS_TOKEN_EXPIRE = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 
 def gerar_token_acesso(dados: dict) -> str:
     dados_para_criptografar = dados.copy()
-    tempo_expiracao = datetime.now(timezone.utc) + timedelta(minutes=int(ACESS_TOKEN_EXPIRE))
+    tempo_expiracao = datetime.now(timezone.utc) + timedelta(minutes=ACESS_TOKEN_EXPIRE)
     dados_para_criptografar.update({"exp": tempo_expiracao})
     
     token_jwt = jwt.encode(dados_para_criptografar, SECRET_KEY, algorithm=ALGORITHM)
