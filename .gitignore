@@ -27,6 +27,8 @@ env/
 # Node
 node_modules/
 dist/
+dist-ssr/
+.vite/
 .vite/
 *.local
 
