@@ -90,6 +90,20 @@ export default function CadastroForm() {
           </div>
 
           <div>
+            <label htmlFor="confirmar-senha" className="block text-sm font-medium text-gray-800 mb-1">Confirmar senha</label>
+            <input
+              id="confirmar-senha"
+              name="confirmarSenha"
+              type="password"
+              placeholder="••••••••"
+              value={form.confirmarSenha}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-orange-400 transition"
+            />
+          </div>
+
+          <div>
             <label htmlFor="curso" className="block text-sm font-medium text-gray-800 mb-1">Curso</label>
             <select
               id="curso"
