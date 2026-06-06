@@ -44,8 +44,9 @@ export default function CadastroForm() {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <div>
-            <label className="block text-sm font-medium text-gray-800 mb-1">Nome completo</label>
+            <label htmlFor="nome" className="block text-sm font-medium text-gray-800 mb-1">Nome completo</label>
             <input
+              id="nome"
               name="nome"
               type="text"
               placeholder="Seu nome"
@@ -57,8 +58,9 @@ export default function CadastroForm() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-800 mb-1">Email institucional</label>
+            <label htmlFor="email-cadastro" className="block text-sm font-medium text-gray-800 mb-1">Email institucional</label>
             <input
+              id="email-cadastro"
               name="email"
               type="email"
               placeholder="seu.nome@estudante.ifms.edu.br"
@@ -70,8 +72,9 @@ export default function CadastroForm() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-800 mb-1">Senha</label>
+            <label htmlFor="senha-cadastro" className="block text-sm font-medium text-gray-800 mb-1">Senha</label>
             <input
+              id="senha-cadastro"
               name="senha"
               type="password"
               placeholder="••••••••"
@@ -83,8 +86,9 @@ export default function CadastroForm() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-800 mb-1">Curso</label>
+            <label htmlFor="curso" className="block text-sm font-medium text-gray-800 mb-1">Curso</label>
             <select
+              id="curso"
               name="curso"
               value={form.curso}
               onChange={handleChange}
