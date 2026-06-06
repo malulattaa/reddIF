@@ -7,7 +7,7 @@ from app.models.tag import post_tag
 
 class Post(Base):
     __tablename__ = "posts"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     titulo = Column(String, nullable=False)
     descricao = Column(String, nullable=False)
