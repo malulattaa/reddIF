@@ -4,6 +4,7 @@ import Cadastro from './views/Cadastro.jsx'
 import Feed from './views/Feed.jsx'
 import PostarDuvida from './views/PostarDuvida.jsx'
 import EmAlta from './views/EmAlta.jsx'
+import Perfil from './views/Perfil.jsx'
 
 function RotaProtegida({ children }) {
   const token = localStorage.getItem('token')
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/feed" element={<RotaProtegida><Feed /></RotaProtegida>} />
         <Route path="/em-alta" element={<RotaProtegida><EmAlta /></RotaProtegida>} />
         <Route path="/postar" element={<RotaProtegida><PostarDuvida /></RotaProtegida>} />
+        <Route path="/perfil" element={<RotaProtegida><Perfil /></RotaProtegida>} />
         <Route path="/perfil" element={<RotaProtegida><Perfil /></RotaProtegida>} />
       </Routes>
     </BrowserRouter>
