@@ -1,26 +1,4 @@
 # Python
-<<<<<<< Updated upstream
-venv/
-**/__pycache__/
-**/*.pyc
-
-*.pyo
-*.egg-info/
-.eggs/
-
-# Env
-.env
-.env.*
-
-# Frontend
-node_modules/
-dist/
-dist-ssr/
-
-# Sistema
-.DS_Store
-Thumbs.db
-=======
 __pycache__/
 *.py[cod]
 *.pyo
@@ -73,4 +51,3 @@ Thumbs.db
 *.db
 *.sqlite
 *.sqlite3
->>>>>>> Stashed changes
