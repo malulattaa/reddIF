@@ -1,16 +1,13 @@
-import os
-import jwt
+from jose import jwt, JWTError
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.database import get_db
 from fastapi.security import OAuth2PasswordBearer
 from app.models.usuario import Usuario
-from dotenv import load_dotenv
+from app.config import settings
 
-load_dotenv()
-
-SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = os.getenv("ALGORITHM")
+SECRET_KEY = settings.SECRET_KEY
+ALGORITHM = settings.ALGORITHM
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
@@ -28,7 +25,7 @@ def obter_usuario_logado(token: str = Depends(oauth2_scheme), db: Session = Depe
         if usuario_id is None:
             raise erro_autenticacao
         
-    except jwt.PyJWTError:
+    except JWTError:
         raise erro_autenticacao
     
     usuario = db.query(Usuario).filter(Usuario.id == int(usuario_id)).first()
