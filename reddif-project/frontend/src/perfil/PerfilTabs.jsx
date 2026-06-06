@@ -40,7 +40,7 @@ function CardPergunta({ item }) {
       <div>
         <p className="font-semibold text-gray-900 text-sm mb-1">{item.titulo}</p>
         <div className="flex items-center gap-1.5 text-xs text-gray-500">
-          <span className="text-orange-500 font-medium">{item.tag}</span>
+          <span className="text-orange-500 font-medium">{item.disciplina}</span>
           <span>•</span>
           <span>{formatarData(item.criado_em)}</span>
         </div>
