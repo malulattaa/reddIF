@@ -31,7 +31,7 @@ export default function CadastroForm() {
     }
     setCarregando(true)
     try {
-      await cadastrar(form.nome, form.email, form.senha, form.curso)
+      await cadastrar(form.nome, form.email, form.senha, form.confirmarSenha, form.curso)
       navigate('/login')
     } catch {
       setErro('Erro ao criar conta. Verifique os dados e tente novamente.')
